@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import logging as log
+import webscraper, json, random
 
 class MongoAPI:
        
@@ -47,6 +48,22 @@ class MongoAPI:
         output = {'Status': 'Successfully deleted' if response.deleted_count > 0 else 'Document not found'}
         
         return output
+    
+    def populate(self):
+        
+        log.info('Writing data')
+        webscraper.scrapCars()
+        
+        with open ('data.json', 'r') as f:
+            json_data = json.load(f)
+            
+            car_list = []
+            
+            for item in json_data:
+                car_list.append(item)    
+        
+        self.collection.update_many({}, {'$set': {'car': random.choice(car_list)}})
+            
 
 if __name__ == '__main__':
     print()

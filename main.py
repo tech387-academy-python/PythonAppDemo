@@ -72,6 +72,20 @@ def mongo_remove():
                     status=200,
                     mimetype='application/json')
                     
+                    
+@app.route('/scrap', methods=['PUT'])
+def mongo_add_cars(): 
+       
+    data = request.json
+    
+    obj1 = MongoAPI(data)
+    obj1.populate()
+    response = obj1.read()
+    
+    return Response(response=json.dumps(response),
+                    status=200,
+                    mimetype='application/json')
+    
 if __name__ == '__main__':
     app.run(debug=True, port=5001, host='0.0.0.0')
 
