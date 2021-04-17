@@ -62,8 +62,11 @@ class MongoAPI:
             for item in json_data:
                 car_list.append(item)    
         
-        self.collection.update_many({}, {'$set': {'car': random.choice(car_list)}})
-            
+        
+        for document in list(self.collection.find()):
+            userId = list(document.keys())[0]
+            self.collection.update({userId : document[userId]}, {'$set' : {'car': random.choice(car_list)}})
+        
 
 if __name__ == '__main__':
     print()
